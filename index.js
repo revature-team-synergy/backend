@@ -1,13 +1,10 @@
-const express = require('express');
+//Imports
+const app = require('./app');
 
+//Port number
 const PORT = 3000;
 
-const app = express();
-
-app.get('/', (req, res) => {
-    return res.send({message: 'Welcome to the server.'});
-});
-
+//Runs the server
 app.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`);
 });
