@@ -2,13 +2,11 @@
 const jwt = require('jsonwebtoken');
 const Promise = require('bluebird');
 
-//This will store the username and role into the token that we create.
-function createToken(username, role, employeeName) {
+//This will store the users data into the token that we create. The token lasts for three days.
+function createToken(username) {
     return jwt.sign({
         exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 3),
-        'username': username,
-        "role": role,
-        "employeeName": employeeName
+        'username': username
     }, process.env.JWTSECRET);
 }
 
