@@ -51,10 +51,41 @@ retrieveUserByEmail = async (email) => {
 
 }
 
+function retrieveUserById(userID) {
+    return userDAO.get({
+        TableName: 'users',
+        Key: {
+            'userID': userID
+        }
+    }).promise();
+}
+
 // UPDATE
+
+function editUserInformation(userId, newUsername, newEmail, newName) {
+    return userDAO.update({
+        TableName: 'users',
+        Key: {
+            userId
+        },
+        UpdateExpression: 'set#a=:value1,#b=:value2,#c=:value3',
+        ExpressionAttributeNames: {
+            "#a": 'username',
+            "#b": 'email',
+            "#c": "name"
+        },
+        ExpressionAttributeValues: {
+            ":value1": newUsername,
+            ":value2": newEmail,
+            ":value3": newName
+        },
+
+        ReturnValues: "UPDATED_NEW"
+    }).promise();
+}
 
 // DELETE
 
-module.exports = { registerUser, retrieveUserByEmail }
+module.exports = { registerUser, retrieveUserByEmail, retrieveUserById, editUserInformation}
 
 registerUser("email@example.com","password")
