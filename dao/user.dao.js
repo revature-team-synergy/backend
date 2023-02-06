@@ -5,6 +5,7 @@ const saltRounds = 10;
 let params;
 let data;
 const TableName = 'users';
+const PRE_FIX = 'u'
 
 // CREATE
 registerUser = async (email, password) => {
@@ -13,7 +14,7 @@ registerUser = async (email, password) => {
     params = {
         TableName,
         Item: {
-            userID: uniqid(),
+            userID: PRE_FIX + uniqid(),
             email,
             password,
             role: "user"
@@ -24,7 +25,7 @@ registerUser = async (email, password) => {
         if(err) {
             throw new Error("Database connection error");
         } else {
-            return true;
+            console.log("registered user")
         }
     }).promise()
 };
@@ -56,4 +57,4 @@ retrieveUserByEmail = async (email) => {
 
 module.exports = { registerUser, retrieveUserByEmail }
 
-registerUser("email1@example.com","password")
+registerUser("email@example.com","password")

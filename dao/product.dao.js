@@ -4,6 +4,7 @@ const itemDAO = new AWS.DynamoDB.DocumentClient()
 let params;
 let data;
 const TableName = 'products';
+const PRE_FIX = 'p'
 
 // CREATE
 createItem = (category, name, price, description) => {
@@ -11,7 +12,7 @@ createItem = (category, name, price, description) => {
     params = {
         TableName,
         Item: {
-            itemID: uniqid(),
+            itemID: PRE_FIX + uniqid(),
             category,
             name,
             price,
@@ -30,7 +31,6 @@ createItem = (category, name, price, description) => {
 };
 
 // READ
-
 retrieveItems = async () => {  
     params = {
         TableName,
@@ -67,18 +67,14 @@ retrieveItemById = async (itemID) => {
     data = await itemDAO.get(params, (err) =>{
         if(err) {
             throw new Error("Database connection error");
-        } else {
-            console.log(data)
-            return data;
         }
-    }).promise()
-    
+    }).promise() 
+    return data;
 }
 
 // UPDATE
 
 // DELETE
-
 deleteItemById = async (itemID) => {
     params = {
         TableName,
@@ -87,11 +83,11 @@ deleteItemById = async (itemID) => {
         }
     }
     data = await itemDAO.delete(params).promise()
-    console.log(data)
     return data;
 }
 
 module.exports = { 
+    AWS,
     createItem,
     retrieveItems, 
     retrieveItemsByCategory,
