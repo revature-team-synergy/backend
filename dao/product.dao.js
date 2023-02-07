@@ -7,7 +7,7 @@ const TableName = 'products';
 const PRE_FIX = 'p'
 
 // CREATE
-createItem = (category, name, price, description) => {
+const createItem = (category, name, price, description) => {
     
     params = {
         TableName,
@@ -31,7 +31,7 @@ createItem = (category, name, price, description) => {
 };
 
 // READ
-retrieveItems = async () => {  
+const retrieveItems = async () => {  
     params = {
         TableName,
     }
@@ -40,7 +40,7 @@ retrieveItems = async () => {
 
 }
 
-retrieveItemsByCategory = async (category) => {
+const retrieveItemsByCategory = async (category) => {
     params = {
         TableName,
         IndexName: 'category-name-index',
@@ -57,7 +57,7 @@ retrieveItemsByCategory = async (category) => {
     return data;
 }
 
-retrieveItemById = async (itemID) => {
+const retrieveItemById = async (itemID) => {
     params = {
         TableName,
         Key: {
@@ -75,7 +75,7 @@ retrieveItemById = async (itemID) => {
 // UPDATE
 
 // DELETE
-deleteItemById = async (itemID) => {
+const deleteItemById = async (itemID) => {
     params = {
         TableName,
         Key: {

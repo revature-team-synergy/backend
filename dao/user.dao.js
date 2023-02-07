@@ -4,17 +4,17 @@ const userDAO = new AWS.DynamoDB.DocumentClient()
 const saltRounds = 10;
 let params;
 let data;
-const TableName = 'users';
+const table = 'users';
 const PRE_FIX = 'u'
 
 // CREATE
-registerUser = async (email, password) => {
+const registerUser = async (email, password) => {
     
     password = require('bcrypt').hashSync(password, saltRounds)
     params = {
-        TableName,
+        TableName: table,
         Item: {
-            userID: PRE_FIX + uniqid(),
+            id: PRE_FIX + uniqid(),
             email,
             password,
             role: "user"
@@ -23,19 +23,20 @@ registerUser = async (email, password) => {
     
     await userDAO.put(params, (err) => {
         if(err) {
+            console.error(err);
             throw new Error("Database connection error");
         } else {
             console.log("registered user")
         }
-    }).promise()
+    });
 };
 
 // READ
 
-retrieveUserByEmail = async (email) => {
+const retrieveUserByEmail = async (email) => {
     
     params = {
-        TableName,
+        TableName: table,
         IndexName: 'email-index',
         Limit: 1,      
         KeyConditionExpression: "#email = :email",
@@ -53,7 +54,7 @@ retrieveUserByEmail = async (email) => {
 
 function retrieveUserById(userID) {
     return userDAO.get({
-        TableName: 'users',
+        TableName: table,
         Key: {
             'userID': userID
         }
@@ -64,7 +65,7 @@ function retrieveUserById(userID) {
 
 function editUserInformation(userId, newUsername, newEmail, newName) {
     return userDAO.update({
-        TableName: 'users',
+        TableName: table,
         Key: {
             userId
         },
@@ -88,4 +89,4 @@ function editUserInformation(userId, newUsername, newEmail, newName) {
 
 module.exports = { registerUser, retrieveUserByEmail, retrieveUserById, editUserInformation}
 
-registerUser("email@example.com","password")
+// registerUser("email@example.com","password")

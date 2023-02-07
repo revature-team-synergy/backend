@@ -1,22 +1,9 @@
-//Imports
-const router = require('express').Router();
+// const cartsRouter = require("./carts.routes");
+const userRouter = require("./user.routes");
 
-//Route imports
-const userRoutes = require('./user.routes');
+const routesList = [
+    // cartsRouter,
+    userRouter
+]
 
-
-//Index route
-router.get('/', (req, res) => {
-    return res.send({message: 'Welcome to the synergy server.'});
-});
-
-//All routes.
-router.use('/users', userRoutes);
-
-
-//Route not found.
-router.use((req, res) => {
-    return res.status(404).send({errorMessage: 'This route does not exist.'});
-});
-
-module.exports = router;
+module.exports = routesList;

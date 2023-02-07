@@ -7,7 +7,7 @@ const TableName = 'orders';
 const PRE_FIX = 'o'
 
 // CREATE
-createOrder = (userID) => {  
+const createOrder = (userID) => {  
     params = {
         TableName,
         Item: {
@@ -30,7 +30,7 @@ createOrder = (userID) => {
 };
 
 // READ
-retrieveOrderByUserId = async (userID) => {
+const retrieveOrderByUserId = async (userID) => {
     params = {
         TableName,
         Limit: 1,
@@ -46,7 +46,7 @@ retrieveOrderByUserId = async (userID) => {
     return data;
 }
 
-retrieveUserByOrderId = async (orderID) => {
+const retrieveUserByOrderId = async (orderID) => {
     params = {
         TableName,
         IndexName: 'orderID-index',
@@ -63,7 +63,7 @@ retrieveUserByOrderId = async (orderID) => {
 }
 
 
-retrievePreviousOrders = async (userID) => {
+const retrievePreviousOrders = async (userID) => {
     params = {
         TableName,
         KeyConditionExpression: '#userID = :id',
@@ -81,7 +81,7 @@ retrievePreviousOrders = async (userID) => {
 
 // UPDATE
 
-addItem = async (userID, itemID) => {
+const addItem = async (userID, itemID) => {
     // Get item from dynamobd
     const item = await retrieveItemById(itemID)
     // Get item from dynamobd
@@ -119,7 +119,7 @@ addItem = async (userID, itemID) => {
     //console.log(params)
 }
 
-removeItem = async (userID, itemID) => {
+const removeItem = async (userID, itemID) => {
     // Get item from dynamobd
     const item = await retrieveItemById(itemID)
     // Get item from dynamobd
@@ -157,7 +157,7 @@ removeItem = async (userID, itemID) => {
 }
 
 // DELETE
-deleteOrderById = async (orderID) => {
+const deleteOrderById = async (orderID) => {
     // DELETE
 }
 
