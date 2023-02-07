@@ -1,13 +1,18 @@
 //Imports
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors({
+    origin: '*'
+}));
 
 //Import server configurations
 require('./config/server.config')(app);
 
 //Router
-const allRoutes = require('./routes/index.routes');
-app.use('/', allRoutes);
+const routesList = require('./routes/index.routes');
+app.use(...routesList);
 
 module.exports = app;

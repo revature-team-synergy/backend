@@ -2,7 +2,7 @@
 const app = require('./app');
 
 //Port number
-const PORT = 3000;
+const PORT = 8084;
 
 //Runs the server
 app.listen(PORT, () => {

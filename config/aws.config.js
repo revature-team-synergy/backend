@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
 // get config vars
 dotenv.config();
-var awsConfig = new AWS.Config({
+const awsConfig = new AWS.Config({
     profile: process.env.USER_NAME, 
     accessKeyId: process.env.ACCESS_KEY_ID, 
     secretKeyId: process.env.SECRET_ACCESS_KEY});

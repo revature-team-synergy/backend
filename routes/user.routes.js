@@ -1,7 +1,9 @@
 //Imports
 const router = require('express').Router();
 const userDao = require('../dao/user.dao');
-const jwtUtil = require()
+const jwtUtil = require('../utility/jwt.util');
+
+router.use("/users", router);
 
 router.get('/:userId', async (req, res) => {
     const user = req.params['userId'];
@@ -12,6 +14,20 @@ router.get('/:userId', async (req, res) => {
         } else {
             res.status(404).send({errorMessage: "The user doesn't exist."});
         }
+    } catch {
+        return res.status(500).send({serverError: 'There was a server error.'});
+    }
+});
+
+router.post('/', async (req, res) => {
+    const user = {
+        email: req.body.email,
+        password: req.body.password
+    }
+    console.log(user);
+    try {
+        await userDao.registerUser(user.email, user.password);
+        res.send({message: "User Registered"});
     } catch {
         return res.status(500).send({serverError: 'There was a server error.'});
     }
@@ -39,3 +55,5 @@ router.patch('/:userId', async (req, res) => {
     }
 
 });
+
+module.exports = router;
