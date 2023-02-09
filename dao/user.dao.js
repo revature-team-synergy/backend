@@ -14,7 +14,7 @@ const registerUser = async (email, password) => {
     params = {
         TableName: table,
         Item: {
-            id: PRE_FIX + uniqid(),
+            userID: PRE_FIX + uniqid(),
             email,
             password,
             role: "user"
