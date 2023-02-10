@@ -4,13 +4,10 @@ const validator = require("../utility/validator.util")
 
 login = async (email, password) => {
     
-    if (!validator.validateEmail(email)) {
-        throw new Error("Please enter a valid email. (ex. example@email.com)");
-    }
-    
     const data = await retrieveUserByEmail(email);
     
     if (data.Items.length === 0) {
+        // If database returns empty list
         throw new Error(`Email not registered`);
     }
     const dbPassword = data.Items[0].password;

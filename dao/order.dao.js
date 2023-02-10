@@ -156,6 +156,29 @@ const removeItem = async (userID, itemID) => {
     //console.log(params)
 }
 
+const purchaseOrder = async (userID) => {
+    // Get item from dynamobd
+    const order = await retrieveOrderByUserId(userID)
+    // Get orderID from order
+    const orderID = order.Items[0].orderID
+   
+    params = {
+        TableName,
+        Key: {
+            userID,
+            orderID
+          },
+        UpdateExpression: 'set #paid = :paid',
+        ExpressionAttributeNames: {
+            '#paid': 'paid'
+        },
+        ExpressionAttributeValues: {
+            ':paid': true
+        }
+    }
+    await orderDAO.update(params).promise()
+}
+
 // DELETE
 const deleteOrderById = async (orderID) => {
     // DELETE
@@ -167,8 +190,7 @@ module.exports = {
     retrieveOrderByUserId,
     addItem,
     removeItem,
+    purchaseOrder
     // deleteOrderById
  }
-
-
-
+ 

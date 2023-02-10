@@ -26,9 +26,11 @@ const registerUser = async (email, password) => {
             console.error(err);
             throw new Error("Database connection error");
         } else {
-            console.log("registered user")
+            return true
         }
     });
+
+    return true;
 };
 
 // READ
