@@ -76,6 +76,8 @@ router.post('/login', async (req, res) => {
         try {
             if (await login(email, password)) {
                 const data = await userDao.retrieveUserByEmail(email);
+                data.Items[0].password = null;
+                console.log(data.Items[0]);
                 const token = await jwtUtil.createToken(data.Items[0]);
                  return res.send({
                     message: 'Successful Login',
