@@ -76,12 +76,12 @@ router.post('/login', async (req, res) => {
         try {
             if (await login(email, password)) {
                 const data = await userDao.retrieveUserByEmail(email);
-                const token = await jwtUtil.createToken(data.Items['userID'], data.Items['role']);
-                return res.send({
+                const token = await jwtUtil.createToken(data.Items[0]);
+                 return res.send({
                     message: 'Successful Login',
                     token: token
                 });
-            } else {
+            } else{
                 res.status(404);
                 return res.send({errorMessage: 'Invalid credentials.'});
             }
