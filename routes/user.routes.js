@@ -23,11 +23,13 @@ router.get('/:userID', async (req, res) => {
 router.post('/', async (req, res) => {
     const user = {
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
     }
     console.log(user);
     try {
-        await userDao.registerUser(user.email, user.password);
+        await userDao.registerUser(user);
         res.send({message: "User Registered"});
     } catch {
         return res.status(500).send({serverError: 'There was a server error.'});
@@ -40,7 +42,7 @@ router.patch('/:userID', async (req, res) => {
 
     //This checks for the logged-in user.
     const token = req.headers.authorization.split("")[1];
-    const payload = await jwtUtil.verifyTokenAndReturnPayload(token);
+    const payload = jwtUtil.verifyTokenAndReturnPayload(token);
 
     //This checks that the target user is the same as the logged-in user.
     if (targetUser !== payload['userID']) {
@@ -78,10 +80,12 @@ router.post('/login', async (req, res) => {
                 const data = await userDao.retrieveUserByEmail(email);
                 data.Items[0].password = null;
                 console.log(data.Items[0]);
-                const token = await jwtUtil.createToken(data.Items[0]);
+                const token = jwtUtil.createToken(data.Items[0].userID, data.Items[0].role);
+                console.log(token);
                  return res.send({
                     message: 'Successful Login',
-                    token: token
+                    token: token,
+                    user: data
                 });
             } else{
                 res.status(404);
@@ -92,7 +96,6 @@ router.post('/login', async (req, res) => {
             return res.status(500).send({serverError: 'A server error has occurred.'});
         }
     }
-)
-;
+);
 
 module.exports = router;

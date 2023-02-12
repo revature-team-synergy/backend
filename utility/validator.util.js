@@ -1,12 +1,8 @@
 function validateEmail(email) {
 
-    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   
-    if (email.match(validRegex)) {
-      return true;
-    } else {
-        return false;
-    } 
-  }
+    return email.match(validRegex); 
+}
 
-  module.exports = { validateEmail }
+module.exports = { validateEmail };

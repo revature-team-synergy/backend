@@ -8,25 +8,27 @@ const table = 'users';
 const PRE_FIX = 'u'
 
 // CREATE
-const registerUser = async (email, password) => {
+const registerUser = async (user) => {
     
-    password = require('bcrypt').hashSync(password, saltRounds)
+    const password = require('bcrypt').hashSync(user.password, saltRounds)
     params = {
         TableName: table,
         Item: {
             userID: PRE_FIX + uniqid(),
-            email,
+            email: user.email,
             password,
+            firstName: user.firstName,
+            lastName: user.lastName,
             role: "user"
         }
     };
     
-    await userDAO.put(params, (err) => {
-        if(err) {
+    userDAO.put(params, (err) => {
+        if (err) {
             console.error(err);
             throw new Error("Database connection error");
         } else {
-            console.log("registered user")
+            console.log("registered user");
         }
     });
 };
