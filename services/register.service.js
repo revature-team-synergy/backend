@@ -1,7 +1,7 @@
 const { registerUser, retrieveUserByEmail } = require('../dao/user.dao');
 const validator = require("../utility/validator.util")
 
-register = async (email, password) => {
+const register = async (email, password) => {
     
     if (!validator.validateEmail(email)) {
         throw new Error("Please enter a valid email. (ex. example@email.com)");

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const { retrieveUserByEmail } = require('../dao/user.dao');
 const validator = require("../utility/validator.util")
 
-login = async (email, password) => {
+const login = async (email, password) => {
     
     if (!validator.validateEmail(email)) {
         throw new Error("Please enter a valid email. (ex. example@email.com)");
