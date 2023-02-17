@@ -77,7 +77,7 @@ async function updateUser(user, userID) {
         UpdateExpression: 'set #email = :email, #password = :password, #firstName = :firstName, #lastName = :lastName',
         ExpressionAttributeNames: {
             '#email': 'email',
-            '#password': 'password',
+            '#password': password,
             '#firstName': 'firstName',
             '#lastName': 'lastName'
         },
