@@ -10,7 +10,7 @@ const PRE_FIX = 'u'
 // CREATE
 const registerUser = async (user) => {
     
-    const password = require('bcrypt').hashSync(user.password, saltRounds)
+    const password = require('bcrypt').hashSync(user.password, saltRounds);
     params = {
         TableName: table,
         Item: {
@@ -35,23 +35,25 @@ const registerUser = async (user) => {
 
 // READ
 
-const retrieveUserByEmail = async (email) => {
-    
-    params = {
+async function getUserByEmail(email) {
+    const params = {
         TableName: table,
         IndexName: 'email-index',
-        Limit: 1,      
-        KeyConditionExpression: "#email = :email",
-        ExpressionAttributeNames:{
-            "#email": "email"
+        KeyConditionExpression: '#email = :email',
+        ExpressionAttributeNames: {
+            '#email': 'email'
         },
         ExpressionAttributeValues: {
-            ":email":email
+            ':email': email
         }
     };
-    data = await userDAO.query(params).promise()
-    return data;
 
+    try {
+        const data = await userDAO.query(params).promise();
+        return data.Items[0];
+    } catch (err) {
+        throw new Error('Error getting user by email from database');
+    }
 }
 
 function retrieveUserById(userID) {
@@ -64,31 +66,38 @@ function retrieveUserById(userID) {
 }
 
 // UPDATE
+async function updateUser(user, userID) {
 
-function editUserInformation(userId, newUsername, newEmail, newName) {
-    return userDAO.update({
+    const password = require('bcrypt').hashSync(user.password, saltRounds);
+    const params = {
         TableName: table,
         Key: {
-            userId
+            'userID': userID
         },
-        UpdateExpression: 'set#a=:value1,#b=:value2,#c=:value3',
+        UpdateExpression: 'set #email = :email, #password = :password, #firstName = :firstName, #lastName = :lastName',
         ExpressionAttributeNames: {
-            "#a": 'username',
-            "#b": 'email',
-            "#c": "name"
+            '#email': 'email',
+            '#password': 'password',
+            '#firstName': 'firstName',
+            '#lastName': 'lastName'
         },
         ExpressionAttributeValues: {
-            ":value1": newUsername,
-            ":value2": newEmail,
-            ":value3": newName
+            ':email': user.email,
+            ':password': password,
+            ':firstName': user.firstName,
+            ':lastName': user.lastName
         },
+        ReturnValues: 'ALL_NEW'
+    };
 
-        ReturnValues: "UPDATED_NEW"
-    }).promise();
+    try {
+        const data = await userDAO.update(params).promise();
+        return data.Attributes;
+    } catch (err) {
+        throw new Error('Error updating user in database');
+    }
 }
 
 // DELETE
 
-module.exports = { registerUser, retrieveUserByEmail, retrieveUserById, editUserInformation}
-
-// registerUser("email@example.com","password")
+module.exports = { registerUser, getUserByEmail, retrieveUserById, updateUser}
