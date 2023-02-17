@@ -1,8 +1,8 @@
-// const cartsRouter = require("./carts.routes");
+const productRouter = require("./product.routes");
 const userRouter = require("./user.routes");
 
 const routesList = [
-    // cartsRouter,
+    productRouter,
     userRouter
 ]
 

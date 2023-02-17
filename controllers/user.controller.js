@@ -2,7 +2,6 @@ const userService = require('../services/user.service');
 const jwtUtil = require('../utility/jwt.util');
 
 async function getCurrentUser(req, res, next) {
-
     try {
         const token = req.headers.authorization.split(" ")[1];
         const payload = jwtUtil.verifyTokenAndReturnPayload(token);
@@ -24,9 +23,8 @@ async function getCurrentUser(req, res, next) {
 }
 
 async function getUserById(req, res, next) {
-    
+    const userId = req.params['userID'];
     try {
-        const userId = req.params['userID'];
         const user = await userService.getUserById(userId);
         res.status(200).json(user);
 
@@ -83,7 +81,6 @@ async function updateUser(req, res, next) {
 }
 
 async function login(req, res, next) {
-    
     try {
         const email = req.body.email;
         const password = req.body.password;
@@ -107,15 +104,5 @@ async function login(req, res, next) {
         return res.send({ serverError: 'A server error has occurred.' });
     }
 }
-
-
-async function create(req, res, next) {
-    try {
-      res.json(await programmingLanguages.create(req.body));
-    } catch (err) {
-      console.error(`Error while creating programming language`, err.message);
-      next(err);
-    }
-  }
 
 module.exports = { getUserById, registerUser, updateUser, login, getCurrentUser };
