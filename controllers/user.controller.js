@@ -9,7 +9,7 @@ async function getCurrentUser(req, res, next) {
             const user = await userService.getUserById(payload['userID']);
             res.status(200).json(user);
         } catch (error) {
-            if (error.message == `User with ID ${userId} not found`) {
+            if (error.message == `User with ID ${payload['userID']} not found`) {
                 res.status(404).json({ message: error.message });
             } else {
                 console.error(error.message);
