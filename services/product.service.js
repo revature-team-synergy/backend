@@ -2,7 +2,7 @@ const productDao = require('../dao/product.dao');
 
 async function getAllProducts() {
     try {
-        const products = productDao.getAllProducts();
+        const products = await productDao.getAllProducts();
         return products;
     } catch (error) {
         throw error;
