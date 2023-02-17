@@ -56,7 +56,6 @@ async function registerUser(req, res, next) {
 }
 
 async function updateUser(req, res, next) {
-    const targetUser = req.params['userID'];
     const user = {
         email: req.body.email,
         password: req.body.password,
@@ -66,11 +65,8 @@ async function updateUser(req, res, next) {
     const token = req.headers.authorization.split(" ")[1];
     try {
         const payload = jwtUtil.verifyTokenAndReturnPayload(token);
-        if(targetUser !== payload['userID']) {
-            return res.status(401).send({errorMessage: "You are not authorized."});
-        }
         try {
-            const updatedUser = await userService.updateUser(user, targetUser);
+            const updatedUser = await userService.updateUser(user, payload['userID']);
             if (!updatedUser) {
                 return res.status(404).send({errorMessage: "User not found."});
             }

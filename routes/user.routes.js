@@ -11,6 +11,6 @@ router.post("/", userController.registerUser);
 
 router.post("/login", userController.login);
 
-router.put("/:userID", userController.updateUser);
+router.put("/", userController.updateUser);
 
 module.exports = router;
