@@ -7,16 +7,16 @@ const TableName = 'products';
 const PRE_FIX = 'p'
 
 // CREATE
-const createItem = (category, name, price, description) => {
+const createProduct = (product) => {
     
     params = {
         TableName,
         Item: {
             itemID: PRE_FIX + uniqid(),
-            category,
-            name,
-            price,
-            description
+            "category": product.category,
+            "name": product.name,
+            "price": product.price,
+            "description": product.description
         }
     };
     
@@ -31,7 +31,7 @@ const createItem = (category, name, price, description) => {
 };
 
 // READ
-const retrieveItems = async () => {  
+const getAllProducts = async () => {  
     params = {
         TableName,
     }
@@ -40,7 +40,7 @@ const retrieveItems = async () => {
 
 }
 
-const retrieveItemsByCategory = async (category) => {
+const retrieveProductsByCategory = async (category) => {
     params = {
         TableName,
         IndexName: 'category-name-index',
@@ -57,7 +57,7 @@ const retrieveItemsByCategory = async (category) => {
     return data;
 }
 
-const retrieveItemById = async (itemID) => {
+const retrieveProductById = async (itemID) => {
     params = {
         TableName,
         Key: {
@@ -88,9 +88,9 @@ const deleteItemById = async (itemID) => {
 
 module.exports = { 
     AWS,
-    createItem,
-    retrieveItems, 
-    retrieveItemsByCategory,
-    retrieveItemById,
+    createProduct,
+    getAllProducts, 
+    retrieveProductsByCategory,
+    retrieveProductById,
     deleteItemById
  }
