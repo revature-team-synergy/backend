@@ -41,8 +41,8 @@ async function createProduct(req, res, next) {
 }
 
 async function getProductByCategory(req, res, next) {
+    const productCategory = req.params['productCategory'];
     try {
-        const productCategory = req.params['productCategory'];
         const products = await productService.getProductByCategory(productCategory);
         res.status(200).json(products);
     } catch (error) {

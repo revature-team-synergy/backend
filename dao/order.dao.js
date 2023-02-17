@@ -11,16 +11,18 @@ const createOrder = (userID) => {
     params = {
         TableName,
         Item: {
-            userID,
+            userID: userID.userID,
             orderID: PRE_FIX + uniqid(),
-            items: [],
-            total: 0,
-            paid: false
+            orders: userID.orders,
+            totalPrice: userID.totalPrice
         }
     };
+
+    console.log(params);
     
     orderDAO.put(params, (err) =>{
         if(err) {
+            console.error(err);
             throw new Error("Database connection error");
         } else {
             console.log("Successfully created order")
@@ -30,40 +32,8 @@ const createOrder = (userID) => {
 };
 
 // READ
-const retrieveOrderByUserId = async (userID) => {
-    params = {
-        TableName,
-        Limit: 1,
-        KeyConditionExpression: '#userID = :id',
-        ExpressionAttributeNames: {
-            '#userID': 'userID'
-        },
-        ExpressionAttributeValues: {
-            ':id': userID
-        }
-    };
-    data = await orderDAO.query(params).promise();
-    return data;
-}
 
-const retrieveUserByOrderId = async (orderID) => {
-    params = {
-        TableName,
-        IndexName: 'orderID-index',
-        KeyConditionExpression: '#orderID = :orderID',
-        ExpressionAttributeNames: {
-            '#orderID': 'orderID'
-        },
-        ExpressionAttributeValues: {
-            ':id': orderID
-        }
-    };
-    data = await orderDAO.query(params).promise();
-    return data;
-}
-
-
-const retrievePreviousOrders = async (userID) => {
+const getOrdersByUserId = async (userID) => {
     params = {
         TableName,
         KeyConditionExpression: '#userID = :id',
@@ -76,99 +46,9 @@ const retrievePreviousOrders = async (userID) => {
     };
     data = await orderDAO.query(params).promise();
     return data;
-}
-
-
-// UPDATE
-
-const addItem = async (userID, itemID) => {
-    // Get item from dynamobd
-    const item = await retrieveItemById(itemID)
-    // Get item from dynamobd
-    const order = await retrieveOrderByUserId(userID)
-    // Get orderID from order
-    const orderID = order.Items[0].orderID
-    // Get price from item
-    const price = item.Item.price
-    let items = order.Items[0].items
-    items.push(itemID)
-    
-    // Update order with items and total    
-    const total = order.Items[0].total + price
-   
-    params = {
-        TableName,
-        Key: {
-            userID,
-            orderID
-          },
-        UpdateExpression: 'set #items = :items, #total = :total',
-        ExpressionAttributeNames: {
-            '#items': 'items',
-            '#total': 'total'
-
-        },
-        ExpressionAttributeValues: {
-            ':items': items,
-            ':total': total
-        }
-    }
-    console.log(params)
-    
-    await orderDAO.update(params).promise()
-    //console.log(params)
-}
-
-const removeItem = async (userID, itemID) => {
-    // Get item from dynamobd
-    const item = await retrieveItemById(itemID)
-    // Get item from dynamobd
-    const order = await retrieveOrderByUserId(userID)
-    // Get orderID from order
-    const orderID = order.Items[0].orderID
-    // Get price from item
-    const price = item.Item.price
-    let items = order.Items[0].items
-    const index = items.indexOf(itemID);
-    items.splice(index, 1);   
-    // Update order with items and total    
-    const total = order.Items[0].total - price
-
-    params = {
-        TableName,
-        Key: {
-            userID,
-            orderID
-          },
-        UpdateExpression: 'set #items = :items, #total = :total',
-        ExpressionAttributeNames: {
-            '#items': 'items',
-            '#total': 'total'
-
-        },
-        ExpressionAttributeValues: {
-            ':items': items,
-            ':total': total
-        }
-    }
-    
-    await orderDAO.update(params).promise()
-    //console.log(params)
-}
-
-// DELETE
-const deleteOrderById = async (orderID) => {
-    // DELETE
 }
 
 module.exports = { 
     createOrder,
-    retrievePreviousOrders, 
-    retrieveOrderByUserId,
-    addItem,
-    removeItem,
-    // deleteOrderById
- }
-
-
-
+    getOrdersByUserId
+}
