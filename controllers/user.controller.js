@@ -3,8 +3,8 @@ const jwtUtil = require('../utility/jwt.util');
 
 async function getCurrentUser(req, res, next) {
 
-    const token = req.headers.authorization.split(" ")[1];
     try {
+        const token = req.headers.authorization.split(" ")[1];
         const payload = jwtUtil.verifyTokenAndReturnPayload(token);
         try {
             const user = await userService.getUserById(payload['userID']);
@@ -24,9 +24,9 @@ async function getCurrentUser(req, res, next) {
 }
 
 async function getUserById(req, res, next) {
-    const userId = req.params['userID'];
     
     try {
+        const userId = req.params['userID'];
         const user = await userService.getUserById(userId);
         res.status(200).json(user);
 
@@ -41,13 +41,13 @@ async function getUserById(req, res, next) {
 }
 
 async function registerUser(req, res, next) {
-    const user = {
-        email: req.body.email,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
-    }
     try {
+        const user = {
+            email: req.body.email,
+            password: req.body.password,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+        }
         res.status(201).json(await userService.registerUser(user));
     } catch (error) {
         res.status(400).json(error.message);
@@ -56,14 +56,14 @@ async function registerUser(req, res, next) {
 }
 
 async function updateUser(req, res, next) {
-    const user = {
-        email: req.body.email,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
-    }
-    const token = req.headers.authorization.split(" ")[1];
     try {
+        const user = {
+            email: req.body.email,
+            password: req.body.password,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+        }
+        const token = req.headers.authorization.split(" ")[1];
         const payload = jwtUtil.verifyTokenAndReturnPayload(token);
         try {
             const updatedUser = await userService.updateUser(user, payload['userID']);
@@ -83,10 +83,10 @@ async function updateUser(req, res, next) {
 }
 
 async function login(req, res, next) {
-    const email = req.body.email;
-    const password = req.body.password;
-  
+    
     try {
+        const email = req.body.email;
+        const password = req.body.password;
         const user = await userService.login(email, password);
         if (user) {
             delete user.password;
