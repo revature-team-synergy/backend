@@ -8,7 +8,7 @@ async function registerUser(user) {
     }
 
     const data = await userDao.getUserByEmail(user.email);
-      
+
     if (data) {
         throw new Error(`Email ${user.email} has already been registered`);
     }
@@ -16,22 +16,22 @@ async function registerUser(user) {
         throw new Error("Password length must be at least 8 characters");
     }
 
-    if(!user.firstName || !user.lastName || !user.email || !user.password) {
+    if (!user.firstName || !user.lastName || !user.email || !user.password) {
         throw new Error("Not enough user information");
     }
-    
+
     return userDao.registerUser(user);
 };
 
 async function login(email, password) {
 
     const data = await userDao.getUserByEmail(email);
-    
+
     if (!data) {
         return null;
     }
     const dbPassword = data.password;
-    
+
     if (!bcrypt.compareSync(password, dbPassword)) {
         return null;
     }
@@ -46,8 +46,8 @@ async function getUserById(userId) {
             return user.Item;
         }
         throw new Error(`User with ID ${userId} not found`);
-    } catch(error) {
-        
+    } catch (error) {
+
         throw error;
     }
 }
@@ -55,7 +55,7 @@ async function getUserById(userId) {
 async function updateUser(user, userID) {
     const existingUser = await userDao.getUserByEmail(user.email);
 
-    if(existingUser && existingUser.userID !== userID) {
+    if (existingUser && existingUser.userID !== userID) {
         throw new Error('Email address is already taken');
     }
 
