@@ -1,7 +1,7 @@
 const orderDao = require('../dao/order.dao');
 
 async function createOrder(order) {
-    if (!order.userID || !order.orders || !order.totalPrice) {
+    if (!order.userID || !order.products || !order.totalPrice) {
         throw new Error("Not enough product information");
     }
     return orderDao.createOrder(order);
