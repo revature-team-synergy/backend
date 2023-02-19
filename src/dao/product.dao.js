@@ -1,5 +1,6 @@
 const AWS = require('../config/aws.config')
 const uniqid = require('uniqid');
+const myCache = require("../config/cache");
 const itemDAO = new AWS.DynamoDB.DocumentClient()
 let params;
 let data;
@@ -31,13 +32,19 @@ const createProduct = (product) => {
 };
 
 // READ
-const getAllProducts = async () => {  
-    params = {
-        TableName,
+const getAllProducts = async () => {
+    const allProducts = myCache.get("allProducts");
+    if(allProducts) {
+        myCache.ttl("allProducts", 300);
+        return allProducts;
+    } else {
+        params = {
+            TableName,
+        }
+        data = await itemDAO.scan(params).promise();
+        myCache.set("allProducts", data, 300);
+        return data;
     }
-    data = await itemDAO.scan(params).promise()
-    return data;
-
 }
 
 const retrieveProductsByCategory = async (category) => {
