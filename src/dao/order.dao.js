@@ -7,14 +7,14 @@ const TableName = 'orders';
 const PRE_FIX = 'o'
 
 // CREATE
-const createOrder = (userID) => {  
+const createOrder = (order) => {  
     params = {
         TableName,
         Item: {
-            userID: userID.userID,
+            userID: order.userID,
             orderID: PRE_FIX + uniqid(),
-            orders: userID.orders,
-            totalPrice: userID.totalPrice
+            products: order.products,
+            totalPrice: order.totalPrice
         }
     };
 

@@ -4,12 +4,14 @@ const jwtUtil = require('../utility/jwt.util');
 async function createOrder(req, res, next) {
     try {
         const token = req.headers.authorization.split(" ")[1];
-        const payload = jwtUtil.verifyTokenAndReturnPayload(token);
+        const payload = await jwtUtil.verifyTokenAndReturnPayload(token);
         const order = {
             userID: payload['userID'],
-            orders: req.body.products,
+            products: req.body.products,
             totalPrice: req.body.totalPrice
         }
+        console.log(req.body);
+        console.log(order);
         res.status(201).json(await orderService.createOrder(order));
     } catch (error) {
         res.status(400).json(error.message);
