@@ -1,5 +1,6 @@
 const { AWS, retrieveItemById } = require('./product.dao');
 const uniqid = require('uniqid');
+const myCache = require("../config/cache");
 const orderDAO = new AWS.DynamoDB.DocumentClient()
 let params;
 let data;
@@ -7,7 +8,11 @@ const TableName = 'orders';
 const PRE_FIX = 'o'
 
 // CREATE
-const createOrder = (order) => {  
+const createOrder = (order) => {
+    const allProducts = myCache.get(order.userID);
+    if(allProducts) {
+        myCache.del(order.userID);
+    }
     params = {
         TableName,
         Item: {
@@ -17,8 +22,6 @@ const createOrder = (order) => {
             totalPrice: order.totalPrice
         }
     };
-
-    console.log(params);
     
     orderDAO.put(params, (err) =>{
         if(err) {
@@ -34,6 +37,12 @@ const createOrder = (order) => {
 // READ
 
 const getOrdersByUserId = async (userID) => {
+    const allProducts = myCache.get(userID);
+    if(allProducts) {
+        myCache.ttl(userID, 300);
+        return allProducts;
+    }
+
     params = {
         TableName,
         KeyConditionExpression: '#userID = :id',
