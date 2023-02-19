@@ -10,8 +10,6 @@ async function createOrder(req, res, next) {
             products: req.body.products,
             totalPrice: req.body.totalPrice
         }
-        console.log(req.body);
-        console.log(order);
         res.status(201).json(await orderService.createOrder(order));
     } catch (error) {
         res.status(400).json(error.message);

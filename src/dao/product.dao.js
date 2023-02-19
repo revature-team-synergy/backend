@@ -9,7 +9,6 @@ const PRE_FIX = 'p'
 
 // CREATE
 const createProduct = (product) => {
-    
     params = {
         TableName,
         Item: {
@@ -37,14 +36,13 @@ const getAllProducts = async () => {
     if(allProducts) {
         myCache.ttl("allProducts", 300);
         return allProducts;
-    } else {
-        params = {
-            TableName,
-        }
-        data = await itemDAO.scan(params).promise();
-        myCache.set("allProducts", data, 300);
-        return data;
     }
+    params = {
+        TableName,
+    }
+    data = await itemDAO.scan(params).promise();
+    myCache.set("allProducts", data, 300);
+    return data;
 }
 
 const retrieveProductsByCategory = async (category) => {
@@ -60,7 +58,6 @@ const retrieveProductsByCategory = async (category) => {
         }
     };
     data = await itemDAO.query(params).promise()
-    console.log(data)
     return data;
 }
 
