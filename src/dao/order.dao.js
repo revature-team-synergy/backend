@@ -39,7 +39,7 @@ const createOrder = (order) => {
 const getOrdersByUserId = async (userID) => {
     const allProducts = myCache.get(userID);
     if(allProducts) {
-        myCache.ttl(userID, 300);
+        myCache.ttl(userID, 600);
         return allProducts;
     }
 
@@ -54,6 +54,7 @@ const getOrdersByUserId = async (userID) => {
         }
     };
     data = await orderDAO.query(params).promise();
+    myCache.set(userID, data, 600);
     return data;
 }
 
